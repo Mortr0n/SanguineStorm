@@ -25,15 +25,15 @@ public class StatEffect_SO : ScriptableObject
         value = Mathf.Max(value, minValue);
         value = Mathf.Min(value, maxValue);
 
-        switch (statType)
-        {
-            case CharacterStatType.Cooldown:
-                weapon.SetCooldown = value; 
-                break;
-            case CharacterStatType.ProjectileAmount:
-                weapon.SetProjectileAmount = value;
-                break;
-        }
+        //switch (statType)
+        //{
+        //    case CharacterStatType.Cooldown:
+        //        weapon.SetCooldown = value; 
+        //        break;
+        //    case CharacterStatType.ProjectileAmount:
+        //        weapon.SetProjectileAmount = value;
+        //        break;
+        //}
     }
 
     public void ApplyToActor(WeaponActor actor, CharacterStats stats)
@@ -49,17 +49,13 @@ public class StatEffect_SO : ScriptableObject
             return;
         }
 
-        float value = stats.GetStat(statType) * multiplier;
         value = Mathf.Max(value, minValue);
         value = Mathf.Min(value, maxValue);
         
         switch (statType)
         {
             case CharacterStatType.Area:
-                actor.SetArea = value;
-                break;
-            case CharacterStatType.ProjectileSpeed:
-                actor.SetProjectileSpeed = value;
+                actor.IncreaseAreaMultiplier(value);
                 break;
         }
     }

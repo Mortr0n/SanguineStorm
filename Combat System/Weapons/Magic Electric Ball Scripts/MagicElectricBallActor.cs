@@ -13,26 +13,25 @@ public class MagicElectricBallActor : WeaponActor
     float magicColliderMultiple = 2.5f;
 
 
+
     public void Initialize()
     {
-        CircleCollider2D collider = GetComponent<CircleCollider2D>();
-        collider.radius *= magicColliderMultiple;
-        float areaStat = VS_PlayerCharacterSheet.instance.Stats().area;
-
-        if (areaStat < maxScale)
-        {
-            transform.localScale *= VS_PlayerCharacterSheet.instance.Stats().area;
-            collider.radius *= VS_PlayerCharacterSheet.instance.Stats().area * magicColliderMultiple;
-        }
-        else
-        {
-            transform.localScale *= maxScale;
-            collider.radius *= maxScale * magicColliderMultiple;
-        }
+        //TODO: Test after I've got everything working
+       SetAttackArea();  
 
         moveDirection = (target.transform.position - transform.position).normalized;
         FinishAnimationAndDestroy();
     }
+
+    public void SetAttackArea()
+    {
+        CircleCollider2D collider = GetComponent<CircleCollider2D>();
+        var area = GetAttackArea();
+        transform.localScale *= area;
+        collider.radius *= area * magicColliderMultiple;
+    }
+
+
 
     private void Update()
     {
@@ -59,5 +58,25 @@ public class MagicElectricBallActor : WeaponActor
         if (thisAnimator.GetBool("CastComplete")) Destroy(gameObject, .3f);
     }
 
+    // Original way just in case I screw it up
+    //public void Initialize()
+    //{
+    //    CircleCollider2D collider = GetComponent<CircleCollider2D>();
+    //    collider.radius *= magicColliderMultiple;
+    //    float areaStat = VS_PlayerCharacterSheet.instance.Stats().area;
+    //    var area = GetAttackArea();
+    //    if (areaStat < maxScale)
+    //    {
+    //        transform.localScale *= VS_PlayerCharacterSheet.instance.Stats().area;
+    //        collider.radius *= VS_PlayerCharacterSheet.instance.Stats().area * magicColliderMultiple;
+    //    }
+    //    else
+    //    {
+    //        transform.localScale *= maxScale;
+    //        collider.radius *= maxScale * magicColliderMultiple;
+    //    }
 
+    //    moveDirection = (target.transform.position - transform.position).normalized;
+    //    FinishAnimationAndDestroy();
+    //}
 }
