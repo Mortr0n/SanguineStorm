@@ -5,6 +5,8 @@ using Unity.VisualScripting;
 
 public class FireBombWeapon : VS_BaseWeapon
 {
+    public override WeaponIdentifier WeaponId => WeaponIdentifier.FireBombWeapon;
+
     [SerializeField] GameObject fireBombPrefab;
     [SerializeField] GameObject enemyTarget;
     [SerializeField] List<GameObject> enemiesInRange = new();

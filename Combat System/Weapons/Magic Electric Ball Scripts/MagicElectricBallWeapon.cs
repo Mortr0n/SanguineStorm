@@ -10,12 +10,13 @@ public class MagicElectricBallWeapon : VS_BaseWeapon
     
     [SerializeField] float baseDamage = 10;
     [SerializeField] float baseCooldown = 3;
-    [SerializeField] float baseArea = 1;
+    
     [SerializeField] float minCastCooldown = 1f;
     float cooldownTimer = 0;
 
     GameObject currentTarget = null;
-
+    
+    override public WeaponIdentifier WeaponId => WeaponIdentifier.MagicElectricBallWeapon;
 
     public override void RunWeapon()
     {

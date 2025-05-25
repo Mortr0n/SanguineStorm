@@ -6,6 +6,8 @@ public class MargaritaActor : WeaponActor
     [SerializeField] float moveSpeed = 7;
     [SerializeField] GameObject explosionObject;
 
+    public override WeaponActorIdentifier WeaponActorIdentifier => WeaponActorIdentifier.MargaritaActor;
+
     private void Start()
     {
         Destroy(gameObject, 7);

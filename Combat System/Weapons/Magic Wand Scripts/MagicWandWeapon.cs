@@ -13,6 +13,7 @@ public class MagicWandWeapon : VS_BaseWeapon
 
     GameObject currentTarget = null;
 
+    override public WeaponIdentifier WeaponId => WeaponIdentifier.MagicWandWeapon;
 
     public override void RunWeapon()
     {

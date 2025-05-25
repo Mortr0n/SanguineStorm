@@ -5,6 +5,8 @@ public class CombatActor2D : MonoBehaviour
     [SerializeField] protected int factionID = 0;
     [SerializeField] protected float damage = 1;
 
+
+
     public virtual void InitializeDamage(float amount)
     {
         damage = amount;
@@ -13,8 +15,6 @@ public class CombatActor2D : MonoBehaviour
     {
         factionID = newID;
     }
-
-   
 
     protected virtual void HitReceiver(CombatReceiver2D target)
     {

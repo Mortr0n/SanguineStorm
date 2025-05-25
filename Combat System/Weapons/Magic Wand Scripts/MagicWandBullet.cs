@@ -4,6 +4,8 @@ public class MagicWandBullet : WeaponActor
 {
     [SerializeField] float bulletSpeed = 2.5f;
     Vector3 moveDirection = Vector3.zero;
+    public override WeaponActorIdentifier WeaponActorIdentifier => WeaponActorIdentifier.MagicWandBulletActor;
+
     private void Start()
     {
         AudioManager.instance.PlayCastWandSFX();

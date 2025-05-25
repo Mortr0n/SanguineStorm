@@ -33,30 +33,14 @@ public class WeaponActor : CombatActor2D
 
     [SerializeField] protected float projectileDamageMult = 1f;
 
+    private WeaponActorIdentifier wActorId;
+    public virtual WeaponActorIdentifier WeaponActorIdentifier => WeaponActorIdentifier.none;
+
 
     public virtual void SetTarget(GameObject newTarget)
     {
         target = newTarget;
     }
-
-
-    //TODO: not anymore  utilizing the IncreaseAreaMultiplier
-    //public void ApplyStatsEffects(CharacterStats stats)
-    //{
-    //    stats.area:
-    //            float attackArea = stats.GetStat(CharacterStatType.Area);
-    //            GetAttackArea(attackArea);
-    //            break;
-    //}
-        
-
-    //    float attackDuration = stats.GetStat(CharacterStatType.Duration);
-    //    float attackSpeed = stats.GetStat(CharacterStatType.ProjectileSpeed);
-    //    float attackMight = stats.GetStat(CharacterStatType.Might);
-    //    float attackCooldown = stats.GetStat(CharacterStatType.Cooldown);
-    //    float attackAmount = stats.GetStat(CharacterStatType.ProjectileAmount);
-       
-    //}
 
 
     public virtual void IncreaseAreaMultiplier(float value)

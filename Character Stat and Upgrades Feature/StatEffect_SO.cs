@@ -5,8 +5,6 @@ public class StatEffect_SO : ScriptableObject
 {
     public CharacterStatType statType;
     public float multiplier = 1f;
-    public float minValue = 0f;
-    public float maxValue = 100f;
 
     public void ApplyToWeapon(VS_BaseWeapon weapon, CharacterStats stats)
     {
@@ -22,21 +20,10 @@ public class StatEffect_SO : ScriptableObject
         }
 
         float value = stats.GetStat(statType) * multiplier;
-        value = Mathf.Max(value, minValue);
-        value = Mathf.Min(value, maxValue);
 
-        //switch (statType)
-        //{
-        //    case CharacterStatType.Cooldown:
-        //        weapon.SetCooldown = value; 
-        //        break;
-        //    case CharacterStatType.ProjectileAmount:
-        //        weapon.SetProjectileAmount = value;
-        //        break;
-        //}
     }
 
-    public void ApplyToActor(WeaponActor actor, CharacterStats stats)
+    public void ApplyToActor(WeaponActor actor, CharacterStats stats, float value)
     {
         if (actor == null)
         {
@@ -48,9 +35,6 @@ public class StatEffect_SO : ScriptableObject
             Debug.LogError("Stats is null");
             return;
         }
-
-        value = Mathf.Max(value, minValue);
-        value = Mathf.Min(value, maxValue);
         
         switch (statType)
         {

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class FireBomb : WeaponActor
 {
+    public override WeaponActorIdentifier WeaponActorIdentifier => WeaponActorIdentifier.FireBombActor;
     private bool hasExploded = false;
 
     private void Start()

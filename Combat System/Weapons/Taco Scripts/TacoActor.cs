@@ -9,7 +9,8 @@ public class TacoActor : WeaponActor
 
     CharacterStats characterStats;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    public override WeaponActorIdentifier WeaponActorIdentifier => WeaponActorIdentifier.TacoActor;
+
     void Start()
     {
         Destroy(gameObject, 7);

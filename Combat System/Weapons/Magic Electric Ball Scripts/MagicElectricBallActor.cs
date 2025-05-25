@@ -11,13 +11,15 @@ public class MagicElectricBallActor : WeaponActor
     // Some people would see that they screwed up on the sizing of the sprites and colliders and choose to fix that
     // not me.  I chose to add a magic number and call myself out in the code.  Welcome to the big leagues!
     float magicColliderMultiple = 2.5f;
+    [SerializeField] float baseArea = 1;
 
-
+    public override WeaponActorIdentifier WeaponActorIdentifier => WeaponActorIdentifier.MagicElectricBallActor;
 
     public void Initialize()
     {
+        
         //TODO: Test after I've got everything working
-       SetAttackArea();  
+        SetAttackArea();  
 
         moveDirection = (target.transform.position - transform.position).normalized;
         FinishAnimationAndDestroy();
@@ -26,7 +28,7 @@ public class MagicElectricBallActor : WeaponActor
     public void SetAttackArea()
     {
         CircleCollider2D collider = GetComponent<CircleCollider2D>();
-        var area = GetAttackArea();
+        var area = GetAttackArea(baseArea);
         transform.localScale *= area;
         collider.radius *= area * magicColliderMultiple;
     }

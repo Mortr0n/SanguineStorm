@@ -5,6 +5,9 @@ public class GarlicWeapon : VS_BaseWeapon
     [SerializeField] GameObject garlicPrefab;
     float garlicSpawnTime = 1f;
     float garlicSpawnTimer = 0f;
+
+    public override WeaponIdentifier WeaponId => WeaponIdentifier.GarlicWeapon;
+
     public override void RunWeapon()
     {
         garlicSpawnTimer += Time.deltaTime;
