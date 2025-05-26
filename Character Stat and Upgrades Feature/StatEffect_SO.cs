@@ -4,9 +4,9 @@ using UnityEngine;
 public class StatEffect_SO : ScriptableObject
 {
     public CharacterStatType statType;
-    public float multiplier = 1f;
+    //public float multiplier = 1f; // TODO: removing for after setting up rarity effect like on the apply to weapon and then pass in from upgrade card
 
-    public void ApplyToWeapon(VS_BaseWeapon weapon, CharacterStats stats)
+    public void ApplyToWeapon(VS_BaseWeapon weapon, CharacterStats stats, float value)
     {
         if (weapon == null)
         {
@@ -19,40 +19,19 @@ public class StatEffect_SO : ScriptableObject
             return;
         }
 
-        float value = stats.GetStat(statType) * multiplier;
-
+        weapon.weaponStatModifiers.ApplyStat(statType, value);
     }
 
-    public void ApplyToActor(WeaponActor actor, CharacterStats stats, float value)
-    {
-        if (actor == null)
-        {
-            Debug.LogError("Actor is null");
-            return;
-        }
-        if (stats == null)
-        {
-            Debug.LogError("Stats is null");
-            return;
-        }
-        
-        switch (statType)
-        {
-            case CharacterStatType.Area:
-                actor.IncreaseAreaMultiplier(value);
-                break;
-        }
-    }
 
-    public void ApplyToPlayer(CharacterStats stats)
+    public void ApplyToPlayer(CharacterStats stats, float value)
     {
         switch (statType)
         {
             case CharacterStatType.MaxHealth:
-                stats.maxHealth *= stats.maxHealth * multiplier;
+                stats.maxHealth *= stats.maxHealth * value;
                 break;
             case CharacterStatType.Recovery:
-                stats.recovery *= multiplier;
+                stats.recovery *= value;
                 break;
         }
     }

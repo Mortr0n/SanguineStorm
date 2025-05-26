@@ -36,7 +36,7 @@ public class MagicElectricBallWeapon : VS_BaseWeapon
                 MagicElectricBallActor magicActor = projectile.GetComponent<MagicElectricBallActor>();
 
                 magicActor.SetTarget(currentTarget);
-                magicActor.Initialize();
+                magicActor.Initialize(weaponStatModifiers);
 
                 cooldownTimer = 0f;
             }

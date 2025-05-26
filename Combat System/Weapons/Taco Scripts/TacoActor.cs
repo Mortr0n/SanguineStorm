@@ -7,7 +7,7 @@ public class TacoActor : WeaponActor
     [SerializeField] GameObject tacoGraphic;
     [SerializeField] float tacoRotationSpeed = 180;
 
-    CharacterStats characterStats;
+    //CharacterStats characterStats;
 
     public override WeaponActorIdentifier WeaponActorIdentifier => WeaponActorIdentifier.TacoActor;
 

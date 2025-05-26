@@ -1,5 +1,7 @@
+using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 
+[System.Serializable]
 public class Rarity
 {
     public enum RarityType
@@ -29,5 +31,7 @@ public class Rarity
                 return Color.white;
         }
     }
+
+   
 
 }

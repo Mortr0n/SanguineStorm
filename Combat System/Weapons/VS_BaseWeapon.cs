@@ -1,9 +1,11 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System;
 
 public class VS_BaseWeapon : MonoBehaviour
 {
     private WeaponIdentifier weaponId;
+    public WeaponStatModifiers weaponStatModifiers = new WeaponStatModifiers();
     public virtual WeaponIdentifier WeaponId => WeaponIdentifier.none;
     // weapon is going to need all the actor variables so it can store them to pass on the changes at initialization so we'll
     // update the weapon for the upgrades, then we'll initialize with the weapon calling their init with any vars.  we could
@@ -36,6 +38,20 @@ public class VS_BaseWeapon : MonoBehaviour
         }
         return null;
     }
+
+
+
+    //public virtual void IncreaseAreaMultiplier(float value)
+    //{
+    //    weaponStatModifiers.projectileAreaMult += value;
+    //}
+
+    //protected virtual float GetAttackArea(float attackArea)
+    //{
+    //    return attackArea =  Math.Min(attackArea * weaponStatModifiers.projectileAreaMult, weaponStatModifiers.maxArea);
+    //}
+
+
 }
 
 

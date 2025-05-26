@@ -10,28 +10,39 @@ public class MagicElectricBallActor : WeaponActor
     [SerializeField] float maxScale = 3f;
     // Some people would see that they screwed up on the sizing of the sprites and colliders and choose to fix that
     // not me.  I chose to add a magic number and call myself out in the code.  Welcome to the big leagues!
-    float magicColliderMultiple = 2.5f;
-    [SerializeField] float baseArea = 1;
+
+    public new float baseSpeed = .5f;
 
     public override WeaponActorIdentifier WeaponActorIdentifier => WeaponActorIdentifier.MagicElectricBallActor;
 
-    public void Initialize()
+    public void Initialize(WeaponStatModifiers weaponstatModifiers)
     {
-        
+        _weaponStatModifiers = weaponstatModifiers;
         //TODO: Test after I've got everything working
-        SetAttackArea();  
+        if (_weaponStatModifiers == null)
+        {
+            Debug.LogWarning("MagicElectricBallActor: weaponStatModifiers is null. Please initialize it before calling Initialize.");
+            return;
+        }
+        if (_weaponStatModifiers != null)
+        {
+            SetAttackArea();
 
-        moveDirection = (target.transform.position - transform.position).normalized;
-        FinishAnimationAndDestroy();
+            moveDirection = (target.transform.position - transform.position).normalized;
+            FinishAnimationAndDestroy();
+        }
+        
     }
 
-    public void SetAttackArea()
+    public override void SetAttackArea()
     {
         CircleCollider2D collider = GetComponent<CircleCollider2D>();
-        var area = GetAttackArea(baseArea);
+        var area = GetAttackArea();
         transform.localScale *= area;
         collider.radius *= area * magicColliderMultiple;
     }
+
+    
 
 
 
@@ -41,7 +52,7 @@ public class MagicElectricBallActor : WeaponActor
         {
             Debug.LogWarning("MagicElectricBallActor: moveDirection is zero — maybe target wasn’t set?");
         }
-        transform.position += (Vector3)(moveDirection * speed * Time.deltaTime);
+        transform.position += (Vector3)(moveDirection * baseSpeed * Time.deltaTime);
     }
 
 
