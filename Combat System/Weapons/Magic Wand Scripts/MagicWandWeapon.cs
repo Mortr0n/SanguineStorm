@@ -27,6 +27,10 @@ public class MagicWandWeapon : VS_BaseWeapon
             {
                 GameObject newBullet = Instantiate(magicWandBulletPrefab, transform.position, Quaternion.identity);
                 newBullet.GetComponent<WeaponActor>().SetTarget(currentTarget);
+                
+                MagicWandBullet newBulletActor = newBullet.GetComponent<MagicWandBullet>();
+                newBulletActor.Initialize(weaponStatModifiers);
+                
                 cooldownTimer = 0;
             }
             else

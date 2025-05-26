@@ -17,6 +17,10 @@ public class MagicElectricBallWeapon : VS_BaseWeapon
     GameObject currentTarget = null;
     
     override public WeaponIdentifier WeaponId => WeaponIdentifier.MagicElectricBallWeapon;
+    private void Start()
+    {
+        weaponStatModifiers.projectileDurationMult = 1.5f;
+    }
 
     public override void RunWeapon()
     {

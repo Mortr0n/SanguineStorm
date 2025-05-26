@@ -112,7 +112,7 @@ public class CharacterStats
     public float speedMod = 1;
 
     public float might = 1;
-    public float projectileSpeed = 1;
+    public float projectileSpeed = 2f;
     public float duration = 1;
     public float area = 1;
 
