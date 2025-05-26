@@ -9,7 +9,8 @@ public class VS_PlayerController : MonoBehaviour
     VS_PlayerAnimator animator;
     VS_PlayerCombat combat;
 
-    [SerializeField] List<VS_BaseWeapon> weapons = new List<VS_BaseWeapon>();
+    [SerializeField] List<VS_BaseWeapon> equippedWeapons = new List<VS_BaseWeapon>();
+    [SerializeField] List<VS_BaseWeapon> allWeapons = new List<VS_BaseWeapon>();
 
     bool alive = true;
 
@@ -23,6 +24,7 @@ public class VS_PlayerController : MonoBehaviour
         characterSheet = GetComponent<VS_PlayerCharacterSheet>();
         animator = GetComponent<VS_PlayerAnimator>();
         combat = GetComponent<VS_PlayerCombat>();
+        EquipWeaponById(WeaponIdentifier.MagicElectricBallWeapon); 
     }
     // Example inside VS_PlayerController
     public Vector2 GetMovementDirection()
@@ -47,11 +49,55 @@ public class VS_PlayerController : MonoBehaviour
 
     void RunWeapons()
     {
-        foreach (VS_BaseWeapon weapon in weapons)
+        foreach (VS_BaseWeapon weapon in equippedWeapons)
         {
             
             if (weapon != null) weapon.RunWeapon();
         }
+    }
+
+    public bool EquipWeaponById(WeaponIdentifier weaponId)
+    {
+        if (HasWeapon(weaponId)) return false; // Already equipped
+
+        // Find the weapon in allWeapons list
+        VS_BaseWeapon weapon = allWeapons.Find(w => w.WeaponId == weaponId);
+        if (weapon == null) return false; // Weapon not found
+        
+        Debug.Log($"Equipping weapon with ID: {weaponId} and name: {weapon.name}");
+        return EquipWeapon(weapon);
+    }
+
+    public bool EquipWeapon(VS_BaseWeapon weapon)
+    {
+        if (HasWeapon(weapon.WeaponId)) return false;
+
+        equippedWeapons.Add(weapon);
+        Debug.Log($"Equipped weapon: {weapon.name} with ID: {weapon.WeaponId}");
+        return true;
+    }
+
+    public int RollRandomWeaponIndex()
+    {
+        if (allWeapons.Count == 0) return -1; // No weapons available
+        return Random.Range(0, allWeapons.Count);
+    }
+
+    public VS_BaseWeapon GetRandomWeapon()
+    {
+        int randomIndex = RollRandomWeaponIndex();
+        if (randomIndex == -1) return null; // No weapons available
+        return GetWeaponFromAllWeapons(randomIndex);
+    }
+
+    public VS_BaseWeapon GetWeaponFromAllWeapons(int itemNumber)
+    {
+        return allWeapons[itemNumber];
+    }
+
+    public bool HasWeapon(WeaponIdentifier weaponId)
+    {
+        return equippedWeapons.Exists(weapon => weapon.WeaponId == weaponId);
     }
 
     public void TriggerDeath()
