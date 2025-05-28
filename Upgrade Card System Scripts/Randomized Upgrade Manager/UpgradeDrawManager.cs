@@ -4,11 +4,18 @@ using UnityEngine;
 public class UpgradeDrawManager : MonoBehaviour
 {
     [SerializeField] private List<UpgradeCard_SO> allUpgradeCards;
-    [SerializeField] private Transform cardContainer;
+    [SerializeField] public Transform cardContainer;
     [SerializeField] private GameObject cardSlotPrefab;
     [SerializeField] private int baseCardCount = 3;
     [SerializeField] private float chanceForFourth = 0.2f;
     [SerializeField] private float chanceForFifth = 0.05f;
+
+    public static UpgradeDrawManager instance;
+
+    private void Awake()
+    {
+        if (instance == null) instance = this;
+    }
 
     private void Start()
     {
@@ -35,11 +42,12 @@ public class UpgradeDrawManager : MonoBehaviour
         {
             var cardGO = Instantiate(cardSlotPrefab, cardContainer);
             var button = cardGO.GetComponentInChildren<UpgradeCardButton>();
-            background
-            //FIXME: add this once it's working
+
             button.SetCard(card);
         }
     }
+
+
 
     private List<UpgradeCard_SO> BuildWeightedPool()
     {

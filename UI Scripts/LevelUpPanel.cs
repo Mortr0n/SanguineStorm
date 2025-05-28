@@ -5,6 +5,7 @@ public class LevelUpPanel : MonoBehaviour
 {
     [SerializeField] GameObject statPanel;
     [SerializeField] GameObject buttonPanel;
+    [SerializeField] GameObject upgradeDrawManager;
     [Space(10)]
     [SerializeField] TextMeshProUGUI hpText;
     [SerializeField] TextMeshProUGUI recoveryText;
@@ -21,14 +22,17 @@ public class LevelUpPanel : MonoBehaviour
     {
         statPanel.SetActive(false);
         buttonPanel.SetActive(false);
+        upgradeDrawManager.SetActive(false);
     }
 
     public void OpenPanel()
     {
         statPanel.SetActive(true);
-        buttonPanel.SetActive(true);
+        buttonPanel.SetActive(false);
         UpdateStatPanel();
         FindFirstObjectByType<RoundManager>().TogglePause();
+        upgradeDrawManager.SetActive(true);
+        UpgradeDrawManager.instance.DrawUpgradeCards();
     }
     public void ClosePanel() 
     {
@@ -36,6 +40,12 @@ public class LevelUpPanel : MonoBehaviour
         buttonPanel.SetActive(false);
         FindFirstObjectByType<RoundManager>().TogglePause();
         TooltipManager.instance.HideTooltip();
+
+        upgradeDrawManager.SetActive(false);
+        foreach (Transform child in UpgradeDrawManager.instance.cardContainer)
+        {
+            Destroy(child.gameObject);
+        }
     }
 
     void SpentPoints()
