@@ -31,17 +31,19 @@ public class UpgradeDrawManager : MonoBehaviour
         List<UpgradeCard_SO> pool = BuildWeightedPool();
         List<UpgradeCard_SO> chosen = new List<UpgradeCard_SO>();
 
+        //drawCount = Mathf.Min(drawCount, pool.Count); // ensure we don't draw more than available cards
         for (int i = 0; i < drawCount; i++)
         {
+            Debug.Log($"Drawing card {i + 1}/{drawCount} from pool of {pool.Count} cards.");
             var chosenCard = pool[UnityEngine.Random.Range(0, pool.Count)];
             chosen.Add(chosenCard);
-            pool.RemoveAll(x => x == chosenCard); // no dupes
+            pool.Remove(chosenCard); // no dupes
         }
 
         foreach (var card in chosen)
         {
             var cardGO = Instantiate(cardSlotPrefab, cardContainer);
-            var button = cardGO.GetComponentInChildren<UpgradeCardButton>();
+            var button = cardGO.GetComponent<UpgradeCardButton>();
 
             button.SetCard(card);
         }

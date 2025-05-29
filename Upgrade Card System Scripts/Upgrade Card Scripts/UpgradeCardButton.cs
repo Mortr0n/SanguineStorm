@@ -14,6 +14,8 @@ public class UpgradeCardButton : MonoBehaviour
     {
         upgradeCard.Apply();
         Debug.Log($"Upgrade card {upgradeCard.name} applied.");
+        UIManager.instance.levelUpPanel.ClosePanel();
+        EventsManager.instance.onPlayerChoseLevelUpgrade?.Invoke();
     }
 
     public void SetCard(UpgradeCard_SO card)
