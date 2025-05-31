@@ -27,7 +27,7 @@ public class LevelUpPanel : MonoBehaviour
 
     public void OpenPanel()
     {
-        statPanel.SetActive(true);
+        statPanel.SetActive(false);
         buttonPanel.SetActive(false);
         UpdateStatPanel();
         FindFirstObjectByType<RoundManager>().TogglePause();

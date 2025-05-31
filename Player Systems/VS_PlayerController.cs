@@ -8,6 +8,7 @@ public class VS_PlayerController : MonoBehaviour
     VS_PlayerCharacterSheet characterSheet;
     VS_PlayerAnimator animator;
     VS_PlayerCombat combat;
+    WeaponStatModifiers weaponStatModifiers;
 
     [SerializeField] List<VS_BaseWeapon> equippedWeapons = new List<VS_BaseWeapon>();
     [SerializeField] List<VS_BaseWeapon> allWeapons = new List<VS_BaseWeapon>();
@@ -24,7 +25,9 @@ public class VS_PlayerController : MonoBehaviour
         characterSheet = GetComponent<VS_PlayerCharacterSheet>();
         animator = GetComponent<VS_PlayerAnimator>();
         combat = GetComponent<VS_PlayerCombat>();
+        weaponStatModifiers = new WeaponStatModifiers();
         EquipWeaponById(WeaponIdentifier.MagicElectricBallWeapon); 
+
     }
     // Example inside VS_PlayerController
     public Vector2 GetMovementDirection()
@@ -63,7 +66,7 @@ public class VS_PlayerController : MonoBehaviour
         // Find the weapon in allWeapons list
         VS_BaseWeapon weapon = allWeapons.Find(w => w.WeaponId == weaponId);
         if (weapon == null) return false; // Weapon not found
-        
+        weapon.Initialize(weaponStatModifiers, characterSheet.Stats());
         Debug.Log($"Equipping weapon with ID: {weaponId} and name: {weapon.name}");
         return EquipWeapon(weapon);
     }
@@ -72,6 +75,7 @@ public class VS_PlayerController : MonoBehaviour
     {
         if (HasWeapon(weapon.WeaponId)) return false;
 
+        weapon.Initialize(weaponStatModifiers, characterSheet.Stats());
         equippedWeapons.Add(weapon);
         Debug.Log($"Equipped weapon: {weapon.name} with ID: {weapon.WeaponId}");
         return true;

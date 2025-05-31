@@ -14,16 +14,16 @@ public class WeaponStatModifiers
 
 
     public float projectileMightMult = 1f;
-    public float maxMight = 10f;
+    public float maxMight = 10000f;
 
 
     public float projectileCooldownMult = 1f;
     public float maxCooldown = 10f;
     public float minCooldown = 0.1f;
 
-    public float projectileAmountMult = 1f;
-    public float maxPAmount = 10f;
-    public float minPAmount = 1f;
+    public int projectileAmountMult = 1;
+    public int maxPAmount = 10;
+    public int minPAmount = 1;
 
 
     // Redundant????
@@ -52,7 +52,7 @@ public class WeaponStatModifiers
                 projectileCooldownMult = Mathf.Clamp(projectileCooldownMult  + value, minCooldown, maxCooldown);
                 break;
             case CharacterStatType.ProjectileAmount:
-                projectileAmountMult = Mathf.Clamp(projectileAmountMult + value, minPAmount, maxPAmount);
+                projectileAmountMult = Mathf.Clamp(projectileAmountMult + (int)value, minPAmount, maxPAmount);
                 break;
 
         }

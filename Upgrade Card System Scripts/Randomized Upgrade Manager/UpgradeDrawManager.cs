@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,15 +16,21 @@ public class UpgradeDrawManager : MonoBehaviour
     private void Awake()
     {
         if (instance == null) instance = this;
+        else if (instance != this)
+        {
+            Debug.LogWarning("Multiple instances of UpgradeDrawManager detected! Destroying duplicate.");
+            Destroy(gameObject);
+        }
     }
 
-    private void Start()
-    {
-        DrawUpgradeCards();
-    }
+    //private void Start()
+    //{
+    //    DrawUpgradeCards();
+    //}
 
     public void DrawUpgradeCards()
     {
+        Debug.Log("Drawing upgrade cards...");
         int drawCount = baseCardCount;
         if (UnityEngine.Random.value < chanceForFourth) drawCount++;
         if (UnityEngine.Random.value < chanceForFifth) drawCount++;
@@ -31,6 +38,7 @@ public class UpgradeDrawManager : MonoBehaviour
         List<UpgradeCard_SO> pool = BuildWeightedPool();
         List<UpgradeCard_SO> chosen = new List<UpgradeCard_SO>();
 
+        drawCount = Mathf.Clamp(drawCount, 3, 5); // ensure we don't draw less than 1 or more than available cards
         //drawCount = Mathf.Min(drawCount, pool.Count); // ensure we don't draw more than available cards
         for (int i = 0; i < drawCount; i++)
         {

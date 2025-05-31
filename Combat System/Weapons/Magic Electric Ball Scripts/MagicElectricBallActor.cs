@@ -4,19 +4,21 @@ using UnityEngine;
 public class MagicElectricBallActor : WeaponActor
 {
     //private float speed = 2f;
-    private Vector2 moveDirection;
+    
+    
     //private float ballTimeToDestroy = 2f;
 
     [SerializeField] float maxScale = 3f;
     // Some people would see that they screwed up on the sizing of the sprites and colliders and choose to fix that
     // not me.  I chose to add a magic number and call myself out in the code.  Welcome to the big leagues!
 
-    //public new float baseSpeed = .5f;
+
 
     public override WeaponActorIdentifier WeaponActorIdentifier => WeaponActorIdentifier.MagicElectricBallActor;
 
-    public void Initialize(WeaponStatModifiers weaponStatModifiers)
+    public override void Initialize(WeaponStatModifiers weaponStatModifiers)
     {
+        base.Initialize(weaponStatModifiers);
         _weaponStatModifiers = weaponStatModifiers;
         //TODO: Test after I've got everything working
         if (_weaponStatModifiers == null)
@@ -27,8 +29,7 @@ public class MagicElectricBallActor : WeaponActor
         if (_weaponStatModifiers != null)
         {
             SetAttackArea();
-
-            moveDirection = (target.transform.position - transform.position).normalized;
+            //moveDirection = (target.transform.position - transform.position).normalized;
             FinishAnimationAndDestroy();
         }
         
@@ -42,10 +43,6 @@ public class MagicElectricBallActor : WeaponActor
         collider.radius *= area * magicColliderMultiple;
     }
 
-    
-
-
-
     private void Update()
     {
         if (moveDirection == Vector2.zero)
@@ -53,6 +50,7 @@ public class MagicElectricBallActor : WeaponActor
             Debug.LogWarning("MagicElectricBallActor: moveDirection is zero — maybe target wasn’t set?");
         }
         Debug.Log($"MagicElectricBallActor: Moving in direction {moveDirection} with speed {GetProjectileSpeed()}");
+        //transform.position += (Vector3)(moveDirection * (projectileSpeed) * Time.deltaTime);
         transform.position += (Vector3)(moveDirection * (GetProjectileSpeed()/2) * Time.deltaTime);
     }
 

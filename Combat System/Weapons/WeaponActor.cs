@@ -5,6 +5,8 @@ using UnityEngine;
 public class WeaponActor : CombatActor2D
 {
     protected GameObject target;
+    protected Vector2? fixedDirection = null; // If we want to set a fixed direction for the weapon, otherwise it will use the target's position to determine direction.
+    protected Vector2 moveDirection;
     protected WeaponStatModifiers _weaponStatModifiers;
     protected CharacterStats characterStats;
 
@@ -14,7 +16,13 @@ public class WeaponActor : CombatActor2D
     float baseArea = 1;
     public float magicColliderMultiple = 1f; //TODO: fix this.  It's a magic number I was applying for the magicelectricball and may not actually be necessary.
 
-    //public float speed = 3f;
+    float projectileSpeed;
+    float projectileDuration;
+    float projectileMight;
+    float projectileCooldown;
+    float projectileAmount;
+
+
     protected virtual void Awake()
     {
         characterStats = VS_PlayerCharacterSheet.instance.Stats();
@@ -24,6 +32,65 @@ public class WeaponActor : CombatActor2D
     public virtual void SetTarget(GameObject newTarget)
     {
         target = newTarget;
+    }
+
+    public virtual void SetFixedDirection(Vector2 dir)
+    {
+        if (dir == Vector2.zero)
+        {
+            Debug.LogWarning("WeaponActor: SetFixedDirection called with zero vector. Please provide a valid direction.");
+            return;
+        }
+        if (fixedDirection.HasValue)
+        {
+            transform.position += (Vector3)(fixedDirection.Value * GetProjectileSpeed() * Time.deltaTime); 
+        }
+        else if (target != null)
+        {
+            Vector2 direction = (target.transform.position - transform.position).normalized;
+            transform.position += (Vector3)(direction * GetProjectileSpeed() * Time.deltaTime);
+        }
+    }
+
+    public virtual void SetDirection(Vector2 direction)
+    {
+        if (direction == Vector2.zero)
+        {
+            Debug.LogWarning("WeaponActor: SetDirection called with zero vector. Please provide a valid direction.");
+            return;
+        }
+        transform.up = direction; // Assuming the weapon's forward direction is up
+    }
+
+    public virtual void Initialize(WeaponStatModifiers weaponStatModifiers)
+    {
+        _weaponStatModifiers = weaponStatModifiers;
+        if (_weaponStatModifiers == null)
+        {
+            Debug.LogWarning("WeaponActor: weaponStatModifiers is null. Please initialize it before calling Initialize.");
+            return;
+        }
+        damage = GetProjectileMight();
+
+        if (fixedDirection.HasValue)
+        {
+            moveDirection = fixedDirection.Value.normalized;
+        }
+        else if (target != null)
+        {
+            moveDirection = (target.transform.position - transform.position).normalized;
+        }
+        else
+        {
+            Debug.LogWarning("WeaponActor: No target set. Using default direction.");
+            moveDirection = Vector2.right; // Default direction if no target is set
+        }
+
+
+            SetAttackArea();
+        projectileSpeed = GetProjectileSpeed();
+        projectileDuration = GetProjectileDuration();
+        projectileMight = GetProjectileMight();
     }
 
     public virtual void SetAttackArea()
@@ -45,6 +112,7 @@ public class WeaponActor : CombatActor2D
         float adjusted = baseArea * _weaponStatModifiers.projectileAreaMult;
         return  Math.Min(adjusted, _weaponStatModifiers.maxArea);
     }
+
 
     protected virtual float GetProjectileSpeed()
     {
@@ -83,28 +151,6 @@ public class WeaponActor : CombatActor2D
         return Math.Min(adjusted, _weaponStatModifiers.maxMight);
     }
 
-    protected virtual float GetProjectileCooldown()
-    {
-        if (_weaponStatModifiers == null)
-        {
-            Debug.LogWarning("WeaponActor: weaponStatModifiers is null. Please initialize it before calling GetProjectileCooldown.");
-            return characterStats.cooldown;
-        }
-        float adjusted = characterStats.cooldown * _weaponStatModifiers.projectileCooldownMult ;
-        Debug.Log("GetProjectileCooldown called with projectileCooldown: " + characterStats.cooldown + " and projectileCooldownMult: " + _weaponStatModifiers.projectileCooldownMult);
-        return Math.Min(adjusted, _weaponStatModifiers.maxCooldown);
-    }
-
-    protected virtual float GetProjectileAmount()
-    {
-        if (_weaponStatModifiers == null)
-        {
-            Debug.LogWarning("WeaponActor: weaponStatModifiers is null. Please initialize it before calling GetProjectileAmount.");
-            return characterStats.amount;
-        }
-        float adjusted = characterStats.amount * _weaponStatModifiers.projectileAmountMult;
-        Debug.Log("GetProjectileAmount called with projectileAmount: " + characterStats.amount + " and projectileAmountMult: " + _weaponStatModifiers.projectileAmountMult);
-        return Math.Min(adjusted, _weaponStatModifiers.projectileAmountMult);
-    }
     
+
 }

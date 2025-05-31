@@ -117,7 +117,7 @@ public class CharacterStats
     public float area = 1;
 
     public float cooldown = 1;
-    public int amount = 0;
+    public int amount = 1;
     public float magnet = 1;
 
     public float GetStat(CharacterStatType type)
