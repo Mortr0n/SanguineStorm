@@ -2,29 +2,28 @@ using UnityEngine;
 
 public class MagicWandBullet : WeaponActor
 {
-    //[SerializeField] float bulletSpeed = 2.5f;
-    Vector3 moveDirection = Vector3.zero;
+    
     public override WeaponActorIdentifier WeaponActorIdentifier => WeaponActorIdentifier.MagicWandBulletActor;
 
-    public void Initialize(WeaponStatModifiers weaponStatModifiers)
-    {
-        _weaponStatModifiers = weaponStatModifiers;
-        //TODO: Test after I've got everything working
-        if (_weaponStatModifiers == null)
-        {
-            Debug.LogWarning("MagicElectricBallActor: weaponStatModifiers is null. Please initialize it before calling Initialize.");
-            return;
-        }
-        if (_weaponStatModifiers != null)
-        {
-            SetAttackArea();
-        }
-    }
+    //public override void Initialize(WeaponStatModifiers weaponStatModifiers)
+    //{
+    //    _weaponStatModifiers = weaponStatModifiers;
+    //    //TODO: Test after I've got everything working
+    //    if (_weaponStatModifiers == null)
+    //    {
+    //        Debug.LogWarning("MagicElectricBallActor: weaponStatModifiers is null. Please initialize it before calling Initialize.");
+    //        return;
+    //    }
+    //    if (_weaponStatModifiers != null)
+    //    {
+    //        SetAttackArea();
+    //    }
+    //}
 
     private void Start()
     {
         AudioManager.instance.PlayCastWandSFX();
-        damage = damage * VS_PlayerCharacterSheet.instance.Stats().might;
+        damage = damage * GetProjectileMight();
         Destroy(gameObject, 5);
     }
     private void FixedUpdate()

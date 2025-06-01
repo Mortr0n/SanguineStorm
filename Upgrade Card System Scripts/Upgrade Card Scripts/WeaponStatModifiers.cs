@@ -53,8 +53,32 @@ public class WeaponStatModifiers
                 break;
             case CharacterStatType.ProjectileAmount:
                 projectileAmountMult = Mathf.Clamp(projectileAmountMult + (int)value, minPAmount, maxPAmount);
+                Debug.Log($"Projectile Amount Multiplier: {projectileAmountMult} and val {value}");
                 break;
 
         }
+    }
+
+    public WeaponStatModifiers Clone()
+    {
+        return new WeaponStatModifiers
+        {
+            projectileSpeedMult = this.projectileSpeedMult,
+            maxPSpeed = this.maxPSpeed,
+            minPSpeed = this.minPSpeed,
+            projectileAreaMult = this.projectileAreaMult,
+            maxArea = this.maxArea,
+            projectileDurationMult = this.projectileDurationMult,
+            maxDuration = this.maxDuration,
+            projectileMightMult = this.projectileMightMult,
+            maxMight = this.maxMight,
+            projectileCooldownMult = this.projectileCooldownMult,
+            maxCooldown = this.maxCooldown,
+            minCooldown = this.minCooldown,
+            projectileAmountMult = this.projectileAmountMult,
+            maxPAmount = this.maxPAmount,
+            minPAmount = this.minPAmount,
+            projectileDamageMult = this.projectileDamageMult,
+        };
     }
 }

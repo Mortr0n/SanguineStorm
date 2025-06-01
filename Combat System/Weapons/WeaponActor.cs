@@ -22,12 +22,17 @@ public class WeaponActor : CombatActor2D
     float projectileCooldown;
     float projectileAmount;
 
+    protected bool useFixedDirection = false;
 
     protected virtual void Awake()
     {
         characterStats = VS_PlayerCharacterSheet.instance.Stats();
     }
-        
+
+    protected virtual void Update()
+    {
+
+    }
 
     public virtual void SetTarget(GameObject newTarget)
     {
@@ -41,15 +46,14 @@ public class WeaponActor : CombatActor2D
             Debug.LogWarning("WeaponActor: SetFixedDirection called with zero vector. Please provide a valid direction.");
             return;
         }
-        if (fixedDirection.HasValue)
-        {
-            transform.position += (Vector3)(fixedDirection.Value * GetProjectileSpeed() * Time.deltaTime); 
-        }
-        else if (target != null)
-        {
-            Vector2 direction = (target.transform.position - transform.position).normalized;
-            transform.position += (Vector3)(direction * GetProjectileSpeed() * Time.deltaTime);
-        }
+        fixedDirection = dir;
+        moveDirection = dir.normalized;
+        useFixedDirection = true;
+        //else if (target != null)
+        //{
+        //    Vector2 direction = (target.transform.position - transform.position).normalized;
+        //    transform.position += (Vector3)(direction * GetProjectileSpeed() * Time.deltaTime);
+        //}
     }
 
     public virtual void SetDirection(Vector2 direction)
@@ -71,21 +75,6 @@ public class WeaponActor : CombatActor2D
             return;
         }
         damage = GetProjectileMight();
-
-        if (fixedDirection.HasValue)
-        {
-            moveDirection = fixedDirection.Value.normalized;
-        }
-        else if (target != null)
-        {
-            moveDirection = (target.transform.position - transform.position).normalized;
-        }
-        else
-        {
-            Debug.LogWarning("WeaponActor: No target set. Using default direction.");
-            moveDirection = Vector2.right; // Default direction if no target is set
-        }
-
 
             SetAttackArea();
         projectileSpeed = GetProjectileSpeed();

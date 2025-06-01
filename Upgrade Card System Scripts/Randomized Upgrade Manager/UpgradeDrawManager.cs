@@ -23,13 +23,21 @@ public class UpgradeDrawManager : MonoBehaviour
         }
     }
 
-    //private void Start()
-    //{
-    //    DrawUpgradeCards();
-    //}
+    private UpgradeCard_SO GetRandomEquipCard()
+    {
+        List<UpgradeCard_SO> equipCards = allUpgradeCards.FindAll(card => card.isWeaponEquipCard && !VS_PlayerController.instance.HasWeapon(card.weaponIdentifier));
+        if (equipCards.Count == 0)
+        {
+            Debug.LogWarning("No equip cards available in the pool.");
+            return null;
+        }
+        return equipCards[UnityEngine.Random.Range(0, equipCards.Count)];
+    }
 
     public void DrawUpgradeCards()
     {
+        var needsEquipCard = VS_PlayerController.instance.NeedsWeapon();
+
         Debug.Log("Drawing upgrade cards...");
         int drawCount = baseCardCount;
         if (UnityEngine.Random.value < chanceForFourth) drawCount++;
@@ -38,8 +46,24 @@ public class UpgradeDrawManager : MonoBehaviour
         List<UpgradeCard_SO> pool = BuildWeightedPool();
         List<UpgradeCard_SO> chosen = new List<UpgradeCard_SO>();
 
+        if (needsEquipCard)
+        {
+            // if we need an equip card, ensure we have at least one in the pool
+            UpgradeCard_SO equipCard = GetRandomEquipCard();
+            if (equipCard != null)
+            {
+                Debug.Log("Adding equip card to pool.");
+                chosen.Add(equipCard);
+                pool.Remove(equipCard); // remove from pool to avoid duplicates
+                drawCount--;
+            }
+            else
+            {
+                Debug.LogWarning("No equip cards available in the pool.");
+            }
+        }
+
         drawCount = Mathf.Clamp(drawCount, 3, 5); // ensure we don't draw less than 1 or more than available cards
-        //drawCount = Mathf.Min(drawCount, pool.Count); // ensure we don't draw more than available cards
         for (int i = 0; i < drawCount; i++)
         {
             Debug.Log($"Drawing card {i + 1}/{drawCount} from pool of {pool.Count} cards.");
@@ -62,24 +86,48 @@ public class UpgradeDrawManager : MonoBehaviour
     private List<UpgradeCard_SO> BuildWeightedPool()
     {
         List<UpgradeCard_SO> pool = new();
+        VS_PlayerController playerController = VS_PlayerController.instance;
         foreach (var card in allUpgradeCards)
         {
-            //bool ownsWeapon = PlayerOwnsWeapon(card.weaponIdentifier);
-            bool ownsWeapon = true; //FIXME: for testing purposes, replace with actual logic above!
-            int weight = 1;
+            bool isEquipCard = card.isWeaponEquipCard;
+            bool weaponUnlocked = playerController.IsWeaponUnlocked(card.weaponIdentifier);
+            bool isEquipped = playerController.HasWeapon(card.weaponIdentifier);
 
-            if (ownsWeapon)
+            int weight = 1;
+            if (isEquipCard)
+            {
+                if (!weaponUnlocked && !isEquipped)
+                {
+                    pool.Add(card); // add equip cards only if the weapon is not unlocked or equipped
+                }
+                continue;
+            }
+            if (isEquipped)
+            {
                 weight = UnityEngine.Random.Range(0, 100) < 50 ? 5 : 2; // random chance to favor owned weapons
 
-            for (int i = 0; i < weight; i++)
-                pool.Add(card);
+                for (int i = 0; i < weight; i++)
+                {
+                    pool.Add(card);
+                }
+                    
+            }
+                
+        }
+
+        // fallback in case pool is empty we can add equip cards
+        if (pool.Count == 0)
+        {
+            Debug.LogWarning("No upgrade cards available in pool, adding equip cards.");
+            foreach (var card in allUpgradeCards)
+            {
+                if (card.isWeaponEquipCard && !playerController.HasWeapon(card.weaponIdentifier));
+                {
+                    pool.Add(card);
+                }
+            }
         }
 
         return pool;
     }
-
-
-
-
-
 }

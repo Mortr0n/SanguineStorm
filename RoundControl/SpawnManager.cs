@@ -30,9 +30,9 @@ public class SpawnManager : MonoBehaviour
         if (nextWaveIndex < waves.Count && globalWaveTimer >= waves[nextWaveIndex].waveStartTime)
             ActivateNextWave();
 
-        // Spawn enemies from all active waves
-        foreach (var wave in activeWaves)
+        for (int i = activeWaves.Count - 1; i >= 0; i--)
         {
+            var wave = activeWaves[i];
             wave.spawnTimer += Time.deltaTime;
 
             if (wave.spawnTimer >= wave.data.waveSpawnTime)
@@ -42,10 +42,33 @@ public class SpawnManager : MonoBehaviour
             }
 
             wave.waveTimer += Time.deltaTime;
+
+            if (wave.waveTimer >= wave.data.waveDuration)
+            {
+                CleanupPoolIfUnused(wave.data.waveEnemy);
+                activeWaves.RemoveAt(i);
+            }
+        }
+    }
+
+    void CleanupPoolIfUnused(GameObject prefab)
+    {
+        // Only destroy the pool if no future waves will use this prefab
+        for (int i = nextWaveIndex; i < waves.Count; i++)
+        {
+            if (waves[i].waveEnemy == prefab)
+                return;
         }
 
-        // Remove expired waves
-        activeWaves.RemoveAll(w => w.waveTimer >= w.data.waveDuration);
+        if (enemyPools.TryGetValue(prefab, out var pool))
+        {
+            foreach (var enemy in pool)
+            {
+                Destroy(enemy);
+            }
+            enemyPools.Remove(prefab);
+            Debug.Log($"Destroyed pool for {prefab.name}");
+        }
     }
 
     void ActivateNextWave()

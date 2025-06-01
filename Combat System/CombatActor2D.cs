@@ -4,7 +4,7 @@ public class CombatActor2D : MonoBehaviour
 {
     [SerializeField] protected int factionID = 0;
     [SerializeField] protected float damage = 1;
-
+    
 
 
     public virtual void InitializeDamage(float amount)

@@ -6,7 +6,7 @@ public class MagicWandWeapon : VS_BaseWeapon
 {
     [SerializeField] float baseDamage = 10;
     [SerializeField] float baseCooldown = 2;
-    float cooldownTimer = 0;
+    protected float cooldownTimer = 0;
 
     [SerializeField] List<CombatReceiver2D> enemiesOnTarget = new List<CombatReceiver2D>();
     [SerializeField] GameObject magicWandBulletPrefab;

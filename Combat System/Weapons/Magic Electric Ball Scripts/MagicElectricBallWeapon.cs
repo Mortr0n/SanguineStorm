@@ -43,27 +43,26 @@ public class MagicElectricBallWeapon : VS_BaseWeapon
                 float startAngle = -totalSpread / 2f;
 
                 Vector3 baseDirection = (currentTarget.transform.position - transform.position).normalized;
+                float baseAngle = Mathf.Atan2(baseDirection.y, baseDirection.x) * Mathf.Rad2Deg;
+
+                Debug.Log("Projectile Amount: " + projectileCount);
                 for (int i = 0; i < projectileCount; i++)
                 {
-                    float angle = startAngle + spreadAngle * i;
-                    Vector3 rotatedDirection = Quaternion.Euler(0, 0, angle) * baseDirection;
+                    float angle = baseAngle + startAngle + spreadAngle * i;
+                    Vector2 rotatedDirection = new Vector2(Mathf.Cos(angle * Mathf.Deg2Rad), Mathf.Sin(angle * Mathf.Deg2Rad));
+                    //Vector3 rotatedDirection = Quaternion.Euler(0, 0, angle) * baseDirection;
 
                     GameObject projectile = Instantiate(magicBallPrefab, transform.position, Quaternion.identity);
                     MagicElectricBallActor magicActor = projectile.GetComponent<MagicElectricBallActor>();
 
                     magicActor.SetDirection(rotatedDirection);
-
-                    bool isCenterProjectile = (i == projectileCount / 2);
-                    if (isCenterProjectile) magicActor.SetTarget(currentTarget);
-                    else magicActor.SetFixedDirection(rotatedDirection);
+                    magicActor.SetFixedDirection(rotatedDirection); // Set the direction for the projectile
+                    //bool isCenterProjectile = (i == projectileCount / 2);
+                    //if (isCenterProjectile) magicActor.SetTarget(currentTarget);
+                    //else magicActor.SetFixedDirection(rotatedDirection);
 
                     magicActor.Initialize(weaponStatModifiers);
                 }
-
-                
-
-                
-
                 cooldownTimer = 0f;
             }
             else

@@ -5,6 +5,7 @@ using UnityEngine;
 public class FireBomb : WeaponActor
 {
     public override WeaponActorIdentifier WeaponActorIdentifier => WeaponActorIdentifier.FireBombActor;
+    public WeaponStatModifiers _weaponStatModifiers;
     private bool hasExploded = false;
 
     private void Start()
@@ -12,6 +13,13 @@ public class FireBomb : WeaponActor
         damage = damage * VS_PlayerCharacterSheet.instance.Stats().might;
         Destroy(gameObject, 1f);
     }
+
+    public override void Initialize(WeaponStatModifiers weaponStatModifiers)
+    {
+        base.Initialize(weaponStatModifiers);
+    }
+
+    
 
 
     protected override void HitReceiver(CombatReceiver2D target)
@@ -24,7 +32,7 @@ public class FireBomb : WeaponActor
 
     private IEnumerator DestroyAfterDelay()
     {
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(GetProjectileDuration());
         Destroy(gameObject);
     }
 }

@@ -64,7 +64,7 @@ public class StatEffectScaling
                     Rarity.RarityType.Rare => 2f,
                     Rarity.RarityType.Epic => 2f,
                     Rarity.RarityType.Legendary => 3f,
-                    _ => 0.1f
+                    _ => 1f
                 };
             case CharacterStatType.Magnet:
                 return rarity switch

@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 
 public class TacoActor : WeaponActor
 {
@@ -13,10 +14,14 @@ public class TacoActor : WeaponActor
 
     void Start()
     {
-        Destroy(gameObject, 7);
+        StartCoroutine(DespawnAfterDelay(GetProjectileDuration()));
+
+        //Destroy(gameObject, 7);
         // Scale by area so it gets bigger as we upgrade area
-        transform.localScale = Vector3.one * VS_PlayerCharacterSheet.instance.Stats().area;
+        transform.localScale = Vector3.one * GetAttackArea();
     }
+
+
 
     private void Update()
     {
@@ -26,7 +31,7 @@ public class TacoActor : WeaponActor
     void FixedUpdate()
     {
         // Moves by the base projectileSpeed modified by the projectile speed upgrade stat
-        transform.Translate(moveVector * Time.fixedDeltaTime * moveSpeed * VS_PlayerCharacterSheet.instance.Stats().projectileSpeed);
+        transform.Translate(moveDirection * Time.fixedDeltaTime * moveSpeed * GetProjectileSpeed());
     }
     public override void SetTarget(GameObject newTarget)
     {
@@ -37,4 +42,11 @@ public class TacoActor : WeaponActor
         // Does damage modified by the might stat
         target.TakeDamage(damage * VS_PlayerCharacterSheet.instance.Stats().might);
     }
+
+    IEnumerator DespawnAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        gameObject.SetActive(false);
+    }
+
 }

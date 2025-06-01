@@ -23,6 +23,6 @@ public class UpgradeCardDisplay : MonoBehaviour
 
         // You could also tint the background or border based on rarity
         selectButton.onClick.RemoveAllListeners();
-        selectButton.onClick.AddListener(() => upgradeData.Apply());
+        //selectButton.onClick.AddListener(() => upgradeData.Apply()); //was calling upgradeData.Apply and upgradecard.apply
     }
 }

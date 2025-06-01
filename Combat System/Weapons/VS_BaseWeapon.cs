@@ -27,11 +27,21 @@ public class VS_BaseWeapon : MonoBehaviour
     }
     public virtual void Initialize(WeaponStatModifiers modifiers, CharacterStats characterStats)
     {
-        if (isInitialized) return;
+        //if (isInitialized) return;
 
         this.weaponStatModifiers = modifiers;
         this.characterStats = characterStats;
-        isInitialized = true;
+        if (!isInitialized)
+        {
+            OnFirstInitialize();
+            isInitialized = true;
+        }
+    }
+
+    protected virtual void OnFirstInitialize()
+    {
+        // Override this method in derived classes to perform additional initialization
+        Debug.Log("Base weapon initialized with modifiers: " + weaponStatModifiers);
     }
 
     protected virtual float GetProjectileCooldown()
@@ -64,7 +74,7 @@ public class VS_BaseWeapon : MonoBehaviour
 
     }
 
-    public GameObject GetClosestTarget(List<GameObject> enemiesInRange)
+    public virtual GameObject GetClosestTarget(List<GameObject> enemiesInRange)
     {
         float closestDistance = Mathf.Infinity;
         Vector3 currentPosition = transform.position;

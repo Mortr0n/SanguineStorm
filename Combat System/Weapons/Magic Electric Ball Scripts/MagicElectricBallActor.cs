@@ -19,6 +19,8 @@ public class MagicElectricBallActor : WeaponActor
     public override void Initialize(WeaponStatModifiers weaponStatModifiers)
     {
         base.Initialize(weaponStatModifiers);
+
+        Debug.DrawRay(transform.position, moveDirection.normalized * 2f, Color.cyan);
         _weaponStatModifiers = weaponStatModifiers;
         //TODO: Test after I've got everything working
         if (_weaponStatModifiers == null)
@@ -43,7 +45,7 @@ public class MagicElectricBallActor : WeaponActor
         collider.radius *= area * magicColliderMultiple;
     }
 
-    private void Update()
+    protected override void Update()
     {
         if (moveDirection == Vector2.zero)
         {

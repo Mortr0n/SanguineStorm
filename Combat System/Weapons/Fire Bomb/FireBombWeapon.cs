@@ -2,6 +2,7 @@ using NUnit.Framework;
 using UnityEngine;
 using System.Collections.Generic;
 using Unity.VisualScripting;
+using System.Linq;
 
 public class FireBombWeapon : VS_BaseWeapon
 {
@@ -9,7 +10,10 @@ public class FireBombWeapon : VS_BaseWeapon
 
     [SerializeField] GameObject fireBombPrefab;
     [SerializeField] GameObject enemyTarget;
+    [SerializeField] GameObject[] enemyTargets;
+    HashSet<GameObject> enemiesInRangeSet = new HashSet<GameObject>();
     [SerializeField] List<GameObject> enemiesInRange = new();
+
 
     protected float spawnTime = 1f;
     protected float spawnTimer = 0f;
@@ -19,17 +23,23 @@ public class FireBombWeapon : VS_BaseWeapon
     {
         spawnTimer += Time.deltaTime;
 
-        if (spawnTimer > spawnTime)
+        if (spawnTimer > GetProjectileCooldown())
         {
-            enemyTarget = GetClosestTarget(enemiesInRange);
-            if (enemyTarget != null)
-            {
-                Vector3 targetPosition = enemyTarget.transform.position;
-                GameObject fireBomb = Instantiate(fireBombPrefab, targetPosition, Quaternion.identity);
-
-                fireBomb.GetComponent<WeaponActor>().SetTarget(enemyTarget); 
-            }            
+            AttackEnemies(enemiesInRange);
             spawnTimer -= spawnTime;
+        }
+    }
+
+    public void AttackEnemies(List<GameObject> enemiesInRange)
+    {
+        List<GameObject> sortedEnemies = enemiesInRange.OrderBy(e => Vector3.Distance(transform.position, e.transform.position)).Take(GetProjectileAmount()).ToList();
+        foreach (var target in sortedEnemies)
+        {
+            GameObject fireBomb = Instantiate(fireBombPrefab, target.transform.position, Quaternion.identity);
+            WeaponActor firebombActor = fireBomb.GetComponent<WeaponActor>();
+            firebombActor.Initialize(weaponStatModifiers);
+            firebombActor.SetTarget(target);
+            
         }
     }
 
@@ -51,20 +61,4 @@ public class FireBombWeapon : VS_BaseWeapon
             enemiesInRange.Remove(other.gameObject);
         }
     }
-
-    //private void GetClosestTarget()
-    //{
-    //    float closestDistance = Mathf.Infinity;
-    //    Vector3 currentPosition = transform.position;
-    //    foreach (GameObject enemy in enemiesInRange)
-    //    {
-    //        float distanceToEnemy = Vector3.Distance(enemy.transform.position, currentPosition);
-    //        if (distanceToEnemy < closestDistance)
-    //        {
-    //            closestDistance = distanceToEnemy;
-    //            enemyTarget = enemy;
-    //        }
-    //    }
-    //}
-
 }

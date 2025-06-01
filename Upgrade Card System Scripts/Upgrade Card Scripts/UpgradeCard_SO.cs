@@ -15,16 +15,26 @@ public class UpgradeCard_SO : ScriptableObject
     public WeaponIdentifier weaponIdentifier; // enum: none, MagicElectricBall, MagicWand, FireBomb, TacoWeapon, GarlicWeapon
     public WeaponActorIdentifier weaponActorIdentifier; // optional, used for Actor target
     public StatEffectTarget target; // enum: Player, Weapon, Actor
+    public bool isWeaponEquipCard; // true if this card is for equipping a weapon, false if it's for applying an upgrade effect
 
     public void Apply()
     {
         CharacterStats stats = VS_PlayerCharacterSheet.instance.Stats();
+        VS_PlayerController playerController = VS_PlayerController.instance;
+
+        if (isWeaponEquipCard)
+        {
+            playerController.EquipWeaponById(weaponIdentifier);
+            return;
+        }
+
         Debug.Log("Applying upgrade: " + upgradeName);
         switch (target)
         {
             case StatEffectTarget.Player:
                 //effect.ApplyToPlayer(stats, effectValue);
                 break;
+
             case StatEffectTarget.Weapon:
                 var weapons = Object.FindObjectsByType<VS_BaseWeapon>(FindObjectsSortMode.None);
                 foreach (var weapon in weapons)
