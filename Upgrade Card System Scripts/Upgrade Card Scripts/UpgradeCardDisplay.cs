@@ -9,6 +9,7 @@ public class UpgradeCardDisplay : MonoBehaviour
     [SerializeField] private Image backgroundImage; //TODO: is this gonna work?
     [SerializeField] private Image iconImage;
     [SerializeField] private Button selectButton;
+    [SerializeField] private Image borderImage; 
 
     private UpgradeCard_SO upgradeData;
 
@@ -19,7 +20,7 @@ public class UpgradeCardDisplay : MonoBehaviour
         titleText.text = data.upgradeName;
         descriptionText.text = data.description;
         iconImage.sprite = data.icon;
-        backgroundImage.color = data.rarity.GetRarityColor(); 
+        borderImage.color = data.rarity.GetRarityColor();  
 
         // You could also tint the background or border based on rarity
         selectButton.onClick.RemoveAllListeners();

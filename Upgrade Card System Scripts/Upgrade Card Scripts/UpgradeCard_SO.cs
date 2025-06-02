@@ -42,8 +42,9 @@ public class UpgradeCard_SO : ScriptableObject
                     Debug.Log($"Checking weapon: {weapon.name} with ID: {weapon.WeaponId} against {weaponIdentifier}");
                     if (weapon.WeaponId == weaponIdentifier)
                     {
-                        Debug.Log($"Applying {effect.name} to weapon: {weapon.name}");
+                        
                         float rarityAdjustedValue = StatEffectScaling.GetRarityEffectValue(effect.statType, rarity.rarityType);
+                        Debug.Log($"Applying {effect.name} to weapon: {weapon.name} that has {rarity.rarityType} rarity and val of {rarityAdjustedValue} ");
                         effect.ApplyToWeapon(weapon, stats, rarityAdjustedValue);
                         return;
                     }

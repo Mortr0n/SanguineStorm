@@ -30,7 +30,7 @@ public class VS_PlayerController : MonoBehaviour
         combat = GetComponent<VS_PlayerCombat>();
         weaponStatModifiers = new WeaponStatModifiers();
         
-        EquipWeaponById(WeaponIdentifier.TacoWeapon);
+        //EquipWeaponById(WeaponIdentifier.TacoWeapon);
 
     }
     // Example inside VS_PlayerController

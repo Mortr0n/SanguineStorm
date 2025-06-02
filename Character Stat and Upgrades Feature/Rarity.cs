@@ -18,20 +18,32 @@ public class Rarity
         switch (rarityType)
         {
             case RarityType.Common:
-                return Color.white;
+                return new Color(197f / 255f, 122f / 255f, 122f / 255f, 1f); // Light brownish
             case RarityType.Uncommon:
-                return Color.green;
+                return new Color(197f / 255f, 218f / 255f, 122f / 255f, 1f); // Greenish
             case RarityType.Rare:
-                return Color.blue;
+                return new Color(75f / 255f, 109f / 255f, 147f / 255f, 1f);  // Blue
             case RarityType.Epic:
-                return new Color(0.5f, 0, 0.5f); // Purple
+                return new Color(197f / 255f, 99f / 255f, 207f / 255f, 1f);  // Purple
             case RarityType.Legendary:
-                return Color.yellow;
+                return new Color(229f / 255f, 187f / 255f, 60f / 255f, 1f);  // Gold
             default:
-                return Color.white;
+                return new Color(197f / 255f, 122f / 255f, 122f / 255f, 1f); // Default to common
         }
     }
 
-   
-
+    public static RarityType GetRandomRarity()
+    {
+        int randomValue = Random.Range(0, 100);
+        if (randomValue < 50)
+            return RarityType.Common; // 50% chance for Common
+        else if (randomValue < 80)
+            return RarityType.Uncommon; // 30% chance for Uncommon
+        else if (randomValue < 95)
+            return RarityType.Rare; // 15% chance for Rare
+        else if (randomValue >= 95)
+            return RarityType.Epic; // 5% chance for Epic
+        else
+            return (RarityType)randomValue;
+    }
 }

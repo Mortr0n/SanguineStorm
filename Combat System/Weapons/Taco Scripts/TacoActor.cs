@@ -17,10 +17,18 @@ public class TacoActor : WeaponActor
         StartCoroutine(DespawnAfterDelay(GetProjectileDuration()));
 
         //Destroy(gameObject, 7);
-        // Scale by area so it gets bigger as we upgrade area
-        transform.localScale = Vector3.one * GetAttackArea();
+        
     }
 
+    public override void Initialize(WeaponStatModifiers weaponStatModifiers)
+    {
+        base.Initialize(weaponStatModifiers);
+        if (tacoGraphic != null)
+        {
+            // Scale by area so it gets bigger as we upgrade area
+            transform.localScale = Vector3.one * GetAttackArea();
+        }
+    }
 
 
     private void Update()

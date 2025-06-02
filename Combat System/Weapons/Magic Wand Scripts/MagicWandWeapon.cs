@@ -17,7 +17,7 @@ public class MagicWandWeapon : VS_BaseWeapon
 
     public override void RunWeapon()
     {
-        if (cooldownTimer < baseCooldown * VS_PlayerCharacterSheet.instance.Stats().cooldown)
+        if (cooldownTimer < baseCooldown * GetProjectileCooldown())
         {
             cooldownTimer += Time.deltaTime;
         }

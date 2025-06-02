@@ -66,9 +66,13 @@ public class UpgradeDrawManager : MonoBehaviour
         drawCount = Mathf.Clamp(drawCount, 3, 5); // ensure we don't draw less than 1 or more than available cards
         for (int i = 0; i < drawCount; i++)
         {
+            
             Debug.Log($"Drawing card {i + 1}/{drawCount} from pool of {pool.Count} cards.");
-            var chosenCard = pool[UnityEngine.Random.Range(0, pool.Count)];
+            UpgradeCard_SO chosenCard = pool[UnityEngine.Random.Range(0, pool.Count)];
+            Rarity.RarityType rarity = Rarity.GetRandomRarity();
+            chosenCard.rarity.rarityType = rarity; // assign a random rarity to the card
             chosen.Add(chosenCard);
+
             pool.Remove(chosenCard); // no dupes
         }
 

@@ -6,11 +6,12 @@ public class TacoWeapon : MagicWandWeapon
     public override WeaponIdentifier WeaponId => WeaponIdentifier.TacoWeapon;
 
     private int lastDirectionIndex = -1;
+    float baseCooldown = 1f; // Base cooldown for taco weapon
 
     public override void RunWeapon()
     {
         cooldownTimer += Time.deltaTime;
-        if (cooldownTimer >= GetProjectileCooldown())
+        if (cooldownTimer >= GetProjectileCooldown() * baseCooldown)
         {
             FireTacos();
             cooldownTimer = 0f;
@@ -20,8 +21,6 @@ public class TacoWeapon : MagicWandWeapon
     public override void Initialize(WeaponStatModifiers modifiers, CharacterStats characterStats)
     {
         base.Initialize(modifiers, characterStats);
-
-        
     }
 
     protected override void OnFirstInitialize()
