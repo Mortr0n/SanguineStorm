@@ -28,9 +28,29 @@ public class TacoActor : WeaponActor
             // Scale by area so it gets bigger as we upgrade area
             transform.localScale = Vector3.one * GetAttackArea();
         }
+        if (useFixedDirection)
+        {
+            if (fixedDirection.HasValue)
+            {
+                moveDirection = fixedDirection.Value;
+            }
+            else
+            {
+                Debug.LogWarning("TacoActor: useFixedDirection is true but fixedDirection is not set. Using moveVector instead.");
+                moveDirection = Vector2.right; // Default direction if fixedDirection is not set
+            }
+        }
+        else
+        {
+            moveDirection = useFixedDirection ? fixedDirection.Value : moveVector.normalized;
+        }
+           
     }
 
-
+    private void DisableTaco()
+    {
+        ObjectPooler.Instance.ReturnToPool("Taco", gameObject);
+    }
     private void Update()
     {
         if(tacoGraphic != null) tacoGraphic.transform.Rotate(0, 0, tacoRotationSpeed * Time.deltaTime);
@@ -55,6 +75,7 @@ public class TacoActor : WeaponActor
     {
         yield return new WaitForSeconds(delay);
         gameObject.SetActive(false);
+        DisableTaco();
     }
 
 }

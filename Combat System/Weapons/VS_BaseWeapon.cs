@@ -64,8 +64,11 @@ public class VS_BaseWeapon : MonoBehaviour
             return characterStats.amount;
         }
         int adjusted = characterStats.amount * weaponStatModifiers.projectileAmountMult;
+
         Debug.Log("GetProjectileAmount called with projectileAmount: " + characterStats.amount + " and projectileAmountMult: " + weaponStatModifiers.projectileAmountMult);
-        return Math.Min(adjusted, weaponStatModifiers.projectileAmountMult);
+        Debug.Log($"Adjusted Projectile Count: {adjusted}, Max Allowed: {weaponStatModifiers.maxPAmount}, char: {characterStats.amount} pamtmult {weaponStatModifiers.projectileAmountMult}");
+
+        return Mathf.Clamp(adjusted, weaponStatModifiers.minPAmount, weaponStatModifiers.maxPAmount);
     }
 
 

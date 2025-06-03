@@ -4,8 +4,8 @@ using System.Collections.Generic;
 [RequireComponent(typeof(CircleCollider2D))]
 public class MagicWandWeapon : VS_BaseWeapon
 {
-    [SerializeField] float baseDamage = 10;
-    [SerializeField] float baseCooldown = 2;
+    [SerializeField] protected float baseDamage = 10;
+    [SerializeField] protected float baseCooldown = 2;
     protected float cooldownTimer = 0;
 
     [SerializeField] List<CombatReceiver2D> enemiesOnTarget = new List<CombatReceiver2D>();

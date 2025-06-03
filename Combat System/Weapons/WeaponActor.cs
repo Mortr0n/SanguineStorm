@@ -49,11 +49,7 @@ public class WeaponActor : CombatActor2D
         fixedDirection = dir;
         moveDirection = dir.normalized;
         useFixedDirection = true;
-        //else if (target != null)
-        //{
-        //    Vector2 direction = (target.transform.position - transform.position).normalized;
-        //    transform.position += (Vector3)(direction * GetProjectileSpeed() * Time.deltaTime);
-        //}
+
     }
 
     public virtual void SetDirection(Vector2 direction)

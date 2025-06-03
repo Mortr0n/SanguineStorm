@@ -6,7 +6,7 @@ public class TacoWeapon : MagicWandWeapon
     public override WeaponIdentifier WeaponId => WeaponIdentifier.TacoWeapon;
 
     private int lastDirectionIndex = -1;
-    float baseCooldown = 1f; // Base cooldown for taco weapon
+    
 
     public override void RunWeapon()
     {
@@ -21,6 +21,7 @@ public class TacoWeapon : MagicWandWeapon
     public override void Initialize(WeaponStatModifiers modifiers, CharacterStats characterStats)
     {
         base.Initialize(modifiers, characterStats);
+        baseCooldown = 1f; // Reset base cooldown to 1 second for TacoWeapon
     }
 
     protected override void OnFirstInitialize()
@@ -43,16 +44,29 @@ public class TacoWeapon : MagicWandWeapon
     {
         int tacoCount = GetProjectileAmount(); // Max 12
         Vector2[] fireDirections = new Vector2[] { Vector2.right, Vector2.left, Vector2.up, Vector2.down };
+        if (tacoCount <= 0) Debug.Log("TacoWeapon: Taco count is zero or negative, no tacos will be fired.");
+        Debug.Log($"Taco count: {tacoCount}, Position: {transform.position}, Direction loop length: {fireDirections.Length}");
 
         for (int i = 0; i < tacoCount; i++)
         {
             Vector2 direction = fireDirections[i % fireDirections.Length]; // Loop after 4
 
             GameObject taco = ObjectPooler.Instance.SpawnFromPool("Taco", transform.position, Quaternion.identity);
+            if (taco == null)
+            {
+                Debug.LogError("TacoWeapon: Failed to spawn Taco from pool. Check if the pool is set up correctly.");
+                continue;
+            }
             TacoActor actor = taco.GetComponent<TacoActor>();
+            if (actor == null)
+            {
+                Debug.LogError("TacoWeapon: TacoActor component not found on Taco prefab.");
+                continue;
+            }
 
-            actor.SetFixedDirection(direction);
             actor.Initialize(weaponStatModifiers);
+            actor.SetFixedDirection(direction);
+            
 
             taco.transform.position = transform.position;
             taco.transform.rotation = Quaternion.identity;

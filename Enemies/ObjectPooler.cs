@@ -21,7 +21,6 @@ public class ObjectPooler : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
-            DontDestroyOnLoad(gameObject);
         }
         else
         {
@@ -55,14 +54,32 @@ public class ObjectPooler : MonoBehaviour
             return null;
         }
 
+        if (poolDictionary[tag].Count == 0)
+        {
+            Debug.LogError($"Pool for '{tag}' is EMPTY in WebGL!");
+            return null;
+        }
+
         GameObject obj = poolDictionary[tag].Dequeue();
 
         obj.SetActive(true);
         obj.transform.position = position;
         obj.transform.rotation = rotation;
 
-        poolDictionary[tag].Enqueue(obj);
-
         return obj;
     }
+
+    public void ReturnToPool(string tag, GameObject obj)
+    {
+        if (!poolDictionary.ContainsKey(tag))
+        {
+            Debug.LogWarning($"Trying to return to unknown pool: {tag}");
+            Destroy(obj); // fallback: destroy to avoid leaks
+            return;
+        }
+
+        obj.SetActive(false);
+        poolDictionary[tag].Enqueue(obj);
+    }
+
 }
