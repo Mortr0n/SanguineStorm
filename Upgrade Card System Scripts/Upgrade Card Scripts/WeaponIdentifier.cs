@@ -7,4 +7,5 @@ public enum WeaponIdentifier
     TacoWeapon,
     GarlicWeapon,
     MargaritaWeapon,
+    InfernusWeapon,
 }
