@@ -14,9 +14,9 @@ public class FireBomb : WeaponActor
         Destroy(gameObject, 1f);
     }
 
-    public override void Initialize(WeaponStatModifiers weaponStatModifiers)
+    public override void Initialize(WeaponStatModifiers weaponStatModifiers, float baseDamage)
     {
-        base.Initialize(weaponStatModifiers);
+        base.Initialize(weaponStatModifiers, baseDamage);
     }
 
     

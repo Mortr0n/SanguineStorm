@@ -14,15 +14,14 @@ public class TacoActor : WeaponActor
 
     void Start()
     {
-        StartCoroutine(DespawnAfterDelay(GetProjectileDuration()));
-
+        //StartCoroutine(DespawnAfterDelay(GetProjectileDuration()));
         //Destroy(gameObject, 7);
-        
     }
 
-    public override void Initialize(WeaponStatModifiers weaponStatModifiers)
+    public override void Initialize(WeaponStatModifiers weaponStatModifiers, float baseDamage)
     {
-        base.Initialize(weaponStatModifiers);
+        baseDamage = .02f; // Set base damage to a very low value for TacoActor
+        base.Initialize(weaponStatModifiers, baseDamage);
         if (tacoGraphic != null)
         {
             // Scale by area so it gets bigger as we upgrade area
@@ -44,14 +43,14 @@ public class TacoActor : WeaponActor
         {
             moveDirection = useFixedDirection ? fixedDirection.Value : moveVector.normalized;
         }
-           
+        StartCoroutine(DespawnAfterDelay(GetProjectileDuration()));
     }
 
     private void DisableTaco()
     {
         ObjectPooler.Instance.ReturnToPool("Taco", gameObject);
     }
-    private void Update()
+    protected override void Update()
     {
         if(tacoGraphic != null) tacoGraphic.transform.Rotate(0, 0, tacoRotationSpeed * Time.deltaTime);
     }
@@ -67,13 +66,16 @@ public class TacoActor : WeaponActor
     }
     protected override void HitReceiver(CombatReceiver2D target)
     {
+        Debug.Log($"TacoActor: Hit receiver {target.name} with taco {name} for {damage} damage.");
         // Does damage modified by the might stat
-        target.TakeDamage(damage * VS_PlayerCharacterSheet.instance.Stats().might);
+        target.TakeDamage(damage);
     }
 
     IEnumerator DespawnAfterDelay(float delay)
     {
+        Debug.Log($"TacoActor: Despawning after {delay} seconds. for taco {name}");
         yield return new WaitForSeconds(delay);
+        Debug.Log($"TacoActor: Despawned. taco {name}");
         gameObject.SetActive(false);
         DisableTaco();
     }

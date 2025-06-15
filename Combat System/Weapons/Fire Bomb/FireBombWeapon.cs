@@ -37,7 +37,7 @@ public class FireBombWeapon : VS_BaseWeapon
         {
             GameObject fireBomb = Instantiate(fireBombPrefab, target.transform.position, Quaternion.identity);
             WeaponActor firebombActor = fireBomb.GetComponent<WeaponActor>();
-            firebombActor.Initialize(weaponStatModifiers);
+            firebombActor.Initialize(weaponStatModifiers, damage);
             firebombActor.SetTarget(target);
             
         }

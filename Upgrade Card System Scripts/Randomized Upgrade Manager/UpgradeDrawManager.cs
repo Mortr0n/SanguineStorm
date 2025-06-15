@@ -38,7 +38,7 @@ public class UpgradeDrawManager : MonoBehaviour
     {
         var needsEquipCard = VS_PlayerController.instance.NeedsWeapon();
 
-        Debug.Log("Drawing upgrade cards...");
+        //Debug.Log("Drawing upgrade cards...");
         int drawCount = baseCardCount;
         if (UnityEngine.Random.value < chanceForFourth) drawCount++;
         if (UnityEngine.Random.value < chanceForFifth) drawCount++;
@@ -52,7 +52,7 @@ public class UpgradeDrawManager : MonoBehaviour
             UpgradeCard_SO equipCard = GetRandomEquipCard();
             if (equipCard != null)
             {
-                Debug.Log("Adding equip card to pool.");
+                //Debug.Log("Adding equip card to pool.");
                 chosen.Add(equipCard);
                 pool.Remove(equipCard); // remove from pool to avoid duplicates
                 drawCount--;
@@ -67,7 +67,7 @@ public class UpgradeDrawManager : MonoBehaviour
         for (int i = 0; i < drawCount; i++)
         {
             
-            Debug.Log($"Drawing card {i + 1}/{drawCount} from pool of {pool.Count} cards.");
+            //Debug.Log($"Drawing card {i + 1}/{drawCount} from pool of {pool.Count} cards.");
             UpgradeCard_SO chosenCard = pool[UnityEngine.Random.Range(0, pool.Count)];
             Rarity.RarityType rarity = Rarity.GetRandomRarity();
             chosenCard.rarity.rarityType = rarity; // assign a random rarity to the card

@@ -28,9 +28,10 @@ public class VS_BaseWeapon : MonoBehaviour
     public virtual void Initialize(WeaponStatModifiers modifiers, CharacterStats characterStats)
     {
         //if (isInitialized) return;
-
+        Debug.Log($"Initializing Base Weapon with modifiers: {modifiers} and character stats: {characterStats}");
         this.weaponStatModifiers = modifiers;
         this.characterStats = characterStats;
+        
         if (!isInitialized)
         {
             OnFirstInitialize();
@@ -44,6 +45,7 @@ public class VS_BaseWeapon : MonoBehaviour
         Debug.Log("Base weapon initialized with modifiers: " + weaponStatModifiers);
     }
 
+    //TODO: Fix cooldown to reduce not increase cooldown!
     protected virtual float GetProjectileCooldown()
     {
         if (weaponStatModifiers == null)
@@ -51,8 +53,8 @@ public class VS_BaseWeapon : MonoBehaviour
             Debug.LogWarning("WeaponActor: weaponStatModifiers is null. Please initialize it before calling GetProjectileCooldown.");
             return characterStats.cooldown;
         }
-        float adjusted = characterStats.cooldown * weaponStatModifiers.projectileCooldownMult;
-        Debug.Log("GetProjectileCooldown called with projectileCooldown: " + characterStats.cooldown + " and projectileCooldownMult: " + weaponStatModifiers.projectileCooldownMult);
+        float adjusted = characterStats.cooldown - (characterStats.cooldown * weaponStatModifiers.projectileCooldownMult);
+        //Debug.Log("GetProjectileCooldown called with projectileCooldown: " + characterStats.cooldown + " and projectileCooldownMult: " + weaponStatModifiers.projectileCooldownMult);
         return Math.Min(adjusted, weaponStatModifiers.maxCooldown);
     }
 
@@ -66,7 +68,7 @@ public class VS_BaseWeapon : MonoBehaviour
         int adjusted = characterStats.amount * weaponStatModifiers.projectileAmountMult;
 
         Debug.Log("GetProjectileAmount called with projectileAmount: " + characterStats.amount + " and projectileAmountMult: " + weaponStatModifiers.projectileAmountMult);
-        Debug.Log($"Adjusted Projectile Count: {adjusted}, Max Allowed: {weaponStatModifiers.maxPAmount}, char: {characterStats.amount} pamtmult {weaponStatModifiers.projectileAmountMult}");
+        Debug.Log($"Adjusted Projectile Count: {adjusted}, Max Allowed: {weaponStatModifiers.maxPAmount}, char: {characterStats.amount} mult {weaponStatModifiers.projectileAmountMult}");
 
         return Mathf.Clamp(adjusted, weaponStatModifiers.minPAmount, weaponStatModifiers.maxPAmount);
     }

@@ -16,13 +16,15 @@ public class WeaponActor : CombatActor2D
     float baseArea = 1;
     public float magicColliderMultiple = 1f; //TODO: fix this.  It's a magic number I was applying for the magicelectricball and may not actually be necessary.
 
-    float projectileSpeed;
-    float projectileDuration;
-    float projectileMight;
-    float projectileCooldown;
-    float projectileAmount;
+    protected float projectileSpeed;
+    protected float projectileDuration;
+    protected float projectileMight;
+    protected float projectileCooldown;
+    protected float projectileAmount;
 
     protected bool useFixedDirection = false;
+
+    protected float originalColliderRadius = -1f; // Used to store the original radius of the collider for resetting purposes
 
     protected virtual void Awake()
     {
@@ -62,7 +64,7 @@ public class WeaponActor : CombatActor2D
         transform.up = direction; // Assuming the weapon's forward direction is up
     }
 
-    public virtual void Initialize(WeaponStatModifiers weaponStatModifiers)
+    public virtual void Initialize(WeaponStatModifiers weaponStatModifiers, float baseDamage)
     {
         _weaponStatModifiers = weaponStatModifiers;
         if (_weaponStatModifiers == null)
@@ -70,7 +72,8 @@ public class WeaponActor : CombatActor2D
             Debug.LogWarning("WeaponActor: weaponStatModifiers is null. Please initialize it before calling Initialize.");
             return;
         }
-        damage = GetProjectileMight();
+       
+        damage = GetProjectileMight() * baseDamage;
 
             SetAttackArea();
         projectileSpeed = GetProjectileSpeed();
@@ -78,9 +81,24 @@ public class WeaponActor : CombatActor2D
         projectileMight = GetProjectileMight();
     }
 
+    // This needs to have colliders reset before each initialization so that it will work well with the object pooling and not continue to scale up the collider radius each time it is initialized.
     public virtual void SetAttackArea()
     {
         CircleCollider2D collider = GetComponent<CircleCollider2D>();
+        if (collider == null)
+        {
+            Debug.LogWarning("WeaponActor: No CircleCollider2D found.");
+            return;
+        }
+        // First time set up of base collider radius
+        if (originalColliderRadius < 0f)
+        {
+            originalColliderRadius = collider.radius;
+        }
+
+        // Reset the collider radius to the original radius before scaling
+        collider.radius = originalColliderRadius;
+
         var area = GetAttackArea();
         transform.localScale *= area;
         collider.radius *= area * magicColliderMultiple; // may need to change
@@ -93,7 +111,7 @@ public class WeaponActor : CombatActor2D
             Debug.LogWarning("WeaponActor: weaponStatModifiers is null. Please initialize it before calling GetAttackArea.");
             return baseArea;
         }
-        Debug.Log("GetAttackArea called with attackArea: " + baseArea + " and projectileAreaMult: " + _weaponStatModifiers.projectileAreaMult);
+        //Debug.Log("GetAttackArea called with attackArea: " + baseArea + " and projectileAreaMult: " + _weaponStatModifiers.projectileAreaMult);
         float adjusted = baseArea * _weaponStatModifiers.projectileAreaMult;
         return  Math.Min(adjusted, _weaponStatModifiers.maxArea);
     }
@@ -107,7 +125,7 @@ public class WeaponActor : CombatActor2D
             return characterStats.projectileSpeed;
         }
         float adjusted = characterStats.projectileSpeed * _weaponStatModifiers.projectileSpeedMult;
-        Debug.Log("GetProjectileSpeed called with projectileSpeed: " + characterStats.projectileSpeed + " and projectileSpeedMult: " + _weaponStatModifiers.projectileSpeedMult);
+        //Debug.Log("GetProjectileSpeed called with projectileSpeed: " + characterStats.projectileSpeed + " and projectileSpeedMult: " + _weaponStatModifiers.projectileSpeedMult);
         return Math.Min(adjusted, _weaponStatModifiers.maxPSpeed);
     }
 
@@ -119,7 +137,7 @@ public class WeaponActor : CombatActor2D
             return characterStats.duration;
         }
         float adjusted = characterStats.duration * _weaponStatModifiers.projectileDurationMult;
-        Debug.Log("GetProjectileDuration called with projectileDuration: " + characterStats.duration + " and projectileDurationMult: " + _weaponStatModifiers.projectileDurationMult);
+        //Debug.Log("GetProjectileDuration called with projectileDuration: " + characterStats.duration + " and projectileDurationMult: " + _weaponStatModifiers.projectileDurationMult);
 
         return Math.Min(adjusted, _weaponStatModifiers.maxDuration);
     }
@@ -132,7 +150,7 @@ public class WeaponActor : CombatActor2D
             return characterStats.might;
         }
         float adjusted = characterStats.might * _weaponStatModifiers.projectileMightMult;
-        Debug.Log("GetProjectileMight called with projectileMight: " + characterStats.might + " and projectileMightMult: " + _weaponStatModifiers.projectileMightMult);
+        //Debug.Log("GetProjectileMight called with projectileMight: " + characterStats.might + " and projectileMightMult: " + _weaponStatModifiers.projectileMightMult);
         return Math.Min(adjusted, _weaponStatModifiers.maxMight);
     }
 

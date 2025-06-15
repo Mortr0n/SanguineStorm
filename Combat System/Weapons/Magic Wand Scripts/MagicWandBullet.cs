@@ -5,25 +5,12 @@ public class MagicWandBullet : WeaponActor
     
     public override WeaponActorIdentifier WeaponActorIdentifier => WeaponActorIdentifier.MagicWandBulletActor;
 
-    //public override void Initialize(WeaponStatModifiers weaponStatModifiers)
-    //{
-    //    _weaponStatModifiers = weaponStatModifiers;
-    //    //TODO: Test after I've got everything working
-    //    if (_weaponStatModifiers == null)
-    //    {
-    //        Debug.LogWarning("MagicElectricBallActor: weaponStatModifiers is null. Please initialize it before calling Initialize.");
-    //        return;
-    //    }
-    //    if (_weaponStatModifiers != null)
-    //    {
-    //        SetAttackArea();
-    //    }
-    //}
+
 
     private void Start()
     {
         AudioManager.instance.PlayCastWandSFX();
-        damage = damage * GetProjectileMight();
+        damage = damage * projectileMight;
         Destroy(gameObject, 5);
     }
     private void FixedUpdate()
@@ -34,7 +21,7 @@ public class MagicWandBullet : WeaponActor
             return;
         }
 
-        transform.position = Vector2.MoveTowards(transform.position, target.transform.position, GetProjectileSpeed() * VS_PlayerCharacterSheet.instance.Stats().projectileSpeed * Time.fixedDeltaTime);
+        transform.position = Vector2.MoveTowards(transform.position, target.transform.position, projectileSpeed * VS_PlayerCharacterSheet.instance.Stats().projectileSpeed * Time.fixedDeltaTime);
     }
     public override void SetTarget(GameObject newTarget)
     {

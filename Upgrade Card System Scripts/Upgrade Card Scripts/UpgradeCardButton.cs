@@ -20,6 +20,7 @@ public class UpgradeCardButton : MonoBehaviour
 
     public void SetCard(UpgradeCard_SO card)
     {
+        Debug.Log($"Setting upgrade card: {card.name}");
         upgradeCard = card;
         upgradeCardDisplay?.Initialize(card);
     }

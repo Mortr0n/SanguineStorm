@@ -61,7 +61,7 @@ public class MagicElectricBallWeapon : VS_BaseWeapon
                     //if (isCenterProjectile) magicActor.SetTarget(currentTarget);
                     //else magicActor.SetFixedDirection(rotatedDirection);
 
-                    magicActor.Initialize(weaponStatModifiers);
+                    magicActor.Initialize(weaponStatModifiers, baseDamage);
                 }
                 cooldownTimer = 0f;
             }

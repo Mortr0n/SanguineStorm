@@ -16,9 +16,10 @@ public class MagicElectricBallActor : WeaponActor
 
     public override WeaponActorIdentifier WeaponActorIdentifier => WeaponActorIdentifier.MagicElectricBallActor;
 
-    public override void Initialize(WeaponStatModifiers weaponStatModifiers)
+    public override void Initialize(WeaponStatModifiers weaponStatModifiers, float baseDamage)
     {
-        base.Initialize(weaponStatModifiers);
+         
+        base.Initialize(weaponStatModifiers, baseDamage);
 
         Debug.DrawRay(transform.position, moveDirection.normalized * 2f, Color.cyan);
         _weaponStatModifiers = weaponStatModifiers;

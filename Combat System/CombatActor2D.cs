@@ -3,7 +3,7 @@ using UnityEngine;
 public class CombatActor2D : MonoBehaviour
 {
     [SerializeField] protected int factionID = 0;
-    [SerializeField] protected float damage = 1;
+    [SerializeField] protected float damage = .005f;
     
 
 
@@ -18,6 +18,7 @@ public class CombatActor2D : MonoBehaviour
 
     protected virtual void HitReceiver(CombatReceiver2D target)
     {
+        Debug.Log(target.name + " hit by " + gameObject.name + " for " + damage + " damage.");
         target.TakeDamage(damage);
     }
 
